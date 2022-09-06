@@ -2,7 +2,7 @@ import Chart from "chart.js/auto";
 
 const Run = (() => {
   const app = () => {
-    console.log();
+    search.focus();
   };
 
   let search = document.getElementById("search");
@@ -28,8 +28,12 @@ const Run = (() => {
       let geo = await response.json();
       fetchWeeklyWeather(geo.results[0].latitude, geo.results[0].longitude);
       fetchHourlyWeather(geo.results[0].latitude, geo.results[0].longitude);
+      document.getElementsByClassName("search")[0].placeholder =
+        "Type in Your City & hit ENTER";
     } catch (error) {
-      console.log(error);
+      search.value = "";
+      document.getElementsByClassName("search")[0].placeholder =
+        "Couldn't find Your City. Please, try again: Type in Your City & hit ENTER";
     }
   }
 
@@ -94,7 +98,46 @@ const Run = (() => {
     }
 
     for (let i = 0; i < 7; i++) {
-      icon[i].textContent = three[i];
+      if (three[i] === 0) {
+        icon[i].innerHTML =
+          '<span class="material-symbols-outlined">clear_day</span>';
+      } else if (three[i] === 1 || three[i] === 2 || three[i] === 3) {
+        icon[i].innerHTML =
+          '<span class="material-symbols-outlined">cloud</span>';
+      } else if (three[i] === 45 || three[i] === 48) {
+        icon[i].innerHTML =
+          '<span class="material-symbols-outlined">foggy</span>';
+      } else if (
+        three[i] === 51 ||
+        three[i] === 53 ||
+        three[i] === 55 ||
+        three[i] === 56 ||
+        three[i] === 57 ||
+        three[i] === 61 ||
+        three[i] === 63 ||
+        three[i] === 65 ||
+        three[i] === 66 ||
+        three[i] === 67 ||
+        three[i] === 80 ||
+        three[i] === 81 ||
+        three[i] === 82
+      ) {
+        icon[i].innerHTML =
+          '<span class="material-symbols-outlined">rainy</span>';
+      } else if (
+        three[i] === 71 ||
+        three[i] === 73 ||
+        three[i] === 75 ||
+        three[i] === 77 ||
+        three[i] === 85 ||
+        three[i] === 86
+      ) {
+        icon[i].innerHTML =
+          '<span class="material-symbols-outlined">weather_snowy</span>';
+      } else if (three[i] === 95 || three[i] === 96 || three[i] === 99) {
+        icon[i].innerHTML =
+          '<span class="material-symbols-outlined">thunderstorm</span>';
+      }
     }
 
     for (let i = 0; i < 7; i++) {
@@ -109,8 +152,8 @@ const Run = (() => {
       date[i].textContent = five[i].substring(5);
     }
 
-    sunrise.textContent = 'Sunrise: ' + six[0].substring(11);
-    sunset.textContent = 'Sunset: ' + seven[0].substring(11);
+    sunrise.textContent = "Sunrise: " + six[0].substring(11);
+    sunset.textContent = "Sunset: " + seven[0].substring(11);
   };
 
   const HourlyWeather = () => {
@@ -126,7 +169,7 @@ const Run = (() => {
         datasets: [
           {
             type: "bar",
-            label: "Precipitation",
+            label: "Precipitation mm",
             data: prec,
             borderColor: "rgb(0, 162, 255)",
             backgroundColor: "rgb(0, 162, 255)",
@@ -142,6 +185,21 @@ const Run = (() => {
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
           20, 21, 22, 23,
         ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            mode: "index",
+            intersect: false,
+          },
+        },
+        hover: {
+          mode: "nearest",
+          intersect: false,
+        },
       },
     });
   };
