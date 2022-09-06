@@ -1,3 +1,5 @@
+import Chart from "chart.js/auto";
+
 const Run = (() => {
   const app = () => {
     console.log();
@@ -31,16 +33,21 @@ const Run = (() => {
     }
   }
 
+  let prec;
+  let temp;
+
   async function fetchHourlyWeather(lat, long) {
     try {
       const response = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,precipitation,weathercode&timezone=auto`,
         {
-          mode: 'cors',
+          mode: "cors",
         }
       );
       const data = await response.json();
-      console.log(data);
+      prec = data.hourly.precipitation;
+      temp = data.hourly.temperature_2m;
+      HourlyWeather();
     } catch (error) {
       console.log(error);
     }
@@ -102,13 +109,42 @@ const Run = (() => {
       date[i].textContent = five[i].substring(5);
     }
 
-    sunrise.textContent = six[0].substring(11);
-    sunset.textContent = seven[0].substring(11);
+    sunrise.textContent = 'Sunrise: ' + six[0].substring(11);
+    sunset.textContent = 'Sunset: ' + seven[0].substring(11);
   };
 
-  const HourlyWeather = (one, two, three) => {
+  const HourlyWeather = () => {
+    const canvas = document.getElementById("hourly");
+    let ctx = document.getElementById("myChart");
+    canvas.removeChild(ctx);
+    ctx = document.createElement("canvas");
+    ctx.id = "myChart";
+    canvas.appendChild(ctx);
 
-  }
+    return new Chart(ctx, {
+      data: {
+        datasets: [
+          {
+            type: "bar",
+            label: "Precipitation",
+            data: prec,
+            borderColor: "rgb(0, 162, 255)",
+            backgroundColor: "rgb(0, 162, 255)",
+          },
+          {
+            type: "line",
+            label: "Temperature",
+            data: temp,
+            borderColor: "rgb(0, 255, 255)",
+          },
+        ],
+        labels: [
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22, 23,
+        ],
+      },
+    });
+  };
 
   return {
     app,
