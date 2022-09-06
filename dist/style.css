@@ -4,6 +4,7 @@
 
 :root {
   background-color: #222;
+  color: #f0f8ff;
 }
 
 body {
@@ -34,6 +35,24 @@ body {
 }
 
 #weather {
+
+}
+
+#weekly {
+  display: grid;
+  grid-template: 1fr / repeat(7, 1fr);
+}
+
+.days {
+  display: grid;
+  place-items: center;
+}
+
+.bar {
+  height: 60px;
+  width: 6px;
+  background: linear-gradient(#ff6868, #5563ff);
+  border-radius: 5px;
 }
 
 #footer {

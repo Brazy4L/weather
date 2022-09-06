@@ -39,17 +39,40 @@ const Run = (() => {
         }
       );
       const data = await response.json();
-      console.log(data);
+      weather(
+        data.daily.temperature_2m_max,
+        data.daily.temperature_2m_min,
+        data.daily.precipitation_sum,
+        data.daily.time
+      );
     } catch (error) {
       console.log(error);
     }
   }
 
-  const weather = () => {
-    let hightemp = document.getElementsByClassName("hightemp");
-    let lowtemp = document.getElementsByClassName("lowtemp");
-    let precip = document.getElementsByClassName("precip");
-    let date = document.getElementsByClassName("date");
+  const weather = (one, two, three, four) => {
+    let hightemp = document.querySelectorAll(".hightemp");
+    let lowtemp = document.querySelectorAll(".lowtemp");
+    let precip = document.querySelectorAll(".precip");
+    let date = document.querySelectorAll(".date");
+
+    for (let i = 0; i < 7; i++) {
+      hightemp[i].textContent = one[i] + " °C";
+    }
+    for (let i = 0; i < 7; i++) {
+      lowtemp[i].textContent = two[i] + " °C";
+    }
+    for (let i = 0; i < 7; i++) {
+      if (three[i] === null) {
+        precip[i].textContent = "0 mm";
+      } else {
+        precip[i].textContent = three[i] + " mm";
+      }
+    }
+    for (let i = 0; i < 7; i++) {
+      four[i] = four[i].substring(5);
+      date[i].textContent = four[i];
+    }
   };
 
   return {
